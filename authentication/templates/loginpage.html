@@ -1,0 +1,9 @@
+<h1>Welcome To Twitter!</h1>
+<p>Where your posts make you very popular? (Does not mean it's a good thing)</p>
+
+<form action="/login/" method = "POST">
+    {% csrf_token %}
+    {{form.as_p}}
+<input type="submit" value="Submit"> <span>or</span>
+<a href="/signup/">Sign up if you don't have an account</a>
+</form>
