@@ -1,3 +1,13 @@
 from django.db import models
+from django.utils import timeszone
+from twitteruser.models import TwitterUser
+from tweet.models import Tweet
 
-# Create your models here.
+class Notification(models.Model):
+    target_user = models.ForeignKey(TwitterUser, on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    date_post = models.DateTimeField(default=timeszone.now)
+    message_visibility = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.target_user} - {self.tweet}"
