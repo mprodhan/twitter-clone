@@ -1,0 +1,11 @@
+<h1>Welcome To Twitter!</h1>
+<p>Where your posts make you very popular? (Does not mean it's a good thing.)</br>
+    To make post your messages here, please sign up or login, if you have an 
+    account.</p>
+
+<form action="/signup/" method = "POST">
+    {% csrf_token %}
+    {{form.as_p}}
+<input type="submit" value="Submit">
+<p><a href="/login/">Click here to login</a></p>
+</form>
