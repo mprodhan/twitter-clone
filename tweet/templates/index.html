@@ -7,15 +7,16 @@
 </head>
 
 <body>
-    <h1>Welcome to Twitter {{twitteruser}}</h1>
+    <h1>Welcome to Twitter {{request.user}}</h1>
     <p>Are you logged in? {{request.user.is_authenticated}}</p>
     
     {% for tweet in tweetdata %}
-
-        {{tweet.twitteruser}}<br>
-        {{tweet.tweet}}<br>
-        {{tweet.post_date}}<br>
-
+    <div>
+        <p><a href="/user/{{tweet.twitteruser.id}}/">{{tweet.twitteruser}}</a></p>
+        <p>{{tweet.tweet}}</p>
+        <p><a href="#">{{tweet.post_date}}</a></p>
+        <!-- tweet.id -->
+    </div><br>
     {% endfor %}
 </body>
 </html>

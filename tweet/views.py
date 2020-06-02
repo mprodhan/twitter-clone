@@ -25,4 +25,19 @@ def profileview(request):
     twitteruser = TwitterUser.objects.get(id=request.user.id)
     tweets = Tweet.objects.all()
     return render(request, "profile.html", {"twitteruser": twitteruser, "tweets": tweets})
-    
+
+def user_detail(request, id):
+    twitteruser = TwitterUser.objects.get(id=id)
+    tweets = Tweet.objects.filter(twitteruser=twitteruser)
+    return render(request, "profile.html", {"twitteruser": twitteruser, "tweets": tweets})
+
+def tweet_edit(request, id):
+    tweet = Tweet.objects.get(id=id)
+    if request.method == "POST":
+        form = TweetPost(request.POST, instance=tweet)
+        form.save()
+        return HttpResponseRedirect(reverse("homepage"))
+    form = TweetPost(instance=tweet)
+    return render(request, "tweets.html", {"form": form})
+
+

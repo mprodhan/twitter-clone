@@ -8,6 +8,6 @@ class Tweet(models.Model):
     post_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f"{self.twittteruser} - {self.tweet}"
+        return self.tweet
 
 
