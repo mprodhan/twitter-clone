@@ -1,7 +1,12 @@
-from django.shortcuts import render, reverse, HttpResponseRedirect
+import re
+
+from django.shortcuts import HttpResponseRedirect, render, reverse
+
+from notification.models import Notification
+from tweet.forms import TweetPost
 from tweet.models import Tweet
 from twitteruser.models import TwitterUser
-from tweet.forms import TweetPost
+
 
 def index(request):
     tweetdata = Tweet.objects.all()
@@ -13,10 +18,18 @@ def tweetadd(request):
         if form.is_valid():
             tweetpost = form.cleaned_data
             twitteruser = TwitterUser.objects.get(id=request.user.id)
-            Tweet.objects.create(
+            tweet = Tweet.objects.create(
                 tweet = tweetpost["tweet"],
                 twitteruser = twitteruser
             )
+            if "@" in tweet.tweet:
+                usernames = re.findall(r"@(\w+)", tweet.tweet)
+                for user in usernames:
+                    t = TwitterUser.objects.get(username=user)
+                    notification = Notification.objects.create(
+                        tweet = tweet,
+                        target_user = t
+                    )
             return HttpResponseRedirect(reverse("homepage"))
     form = TweetPost()
     return render(request, "tweets.html" , {"form": form})
@@ -31,6 +44,11 @@ def user_detail(request, id):
     tweets = Tweet.objects.filter(twitteruser=twitteruser)
     return render(request, "profile.html", {"twitteruser": twitteruser, "tweets": tweets})
 
+def tweet_detail(request, id):
+    tweet = Tweet.objects.get(id=id)
+    return render(request, "tweetdetail.html", {"tweet": tweet})
+
+
 def tweet_edit(request, id):
     tweet = Tweet.objects.get(id=id)
     if request.method == "POST":
@@ -39,5 +57,4 @@ def tweet_edit(request, id):
         return HttpResponseRedirect(reverse("homepage"))
     form = TweetPost(instance=tweet)
     return render(request, "tweets.html", {"form": form})
-
 
