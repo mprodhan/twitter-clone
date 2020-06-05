@@ -1,0 +1,12 @@
+<h1>Notifications</h1>
+<ul>
+    {% for n in notifications %}    
+        {% if n.message_visibility %}
+
+        <li>
+            {{n.tweet}}
+        </li>
+        {% endif %}
+    {% endfor %}
+
+</ul>

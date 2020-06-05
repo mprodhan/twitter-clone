@@ -1,17 +1,20 @@
 import re
 
 from django.shortcuts import HttpResponseRedirect, render, reverse
+from django.contrib.auth.decorators import login_required
 
 from notification.models import Notification
 from tweet.forms import TweetPost
 from tweet.models import Tweet
 from twitteruser.models import TwitterUser
 
-
+@login_required
 def index(request):
     tweetdata = Tweet.objects.all()
     return render(request, "index.html", {"tweetdata": tweetdata})
 
+# Assistance from Peter with the Notification creation piece
+@login_required
 def tweetadd(request):
     if request.method == "POST":
         form = TweetPost(request.POST)
@@ -34,6 +37,7 @@ def tweetadd(request):
     form = TweetPost()
     return render(request, "tweets.html" , {"form": form})
 
+@login_required
 def profileview(request):
     twitteruser = TwitterUser.objects.get(id=request.user.id)
     tweets = Tweet.objects.all()
@@ -48,7 +52,7 @@ def tweet_detail(request, id):
     tweet = Tweet.objects.get(id=id)
     return render(request, "tweetdetail.html", {"tweet": tweet})
 
-
+@login_required
 def tweet_edit(request, id):
     tweet = Tweet.objects.get(id=id)
     if request.method == "POST":
