@@ -10,15 +10,16 @@
     <h1>Welcome to Twitter {{request.user}}</h1>
     <p>Are you logged in? {{request.user.is_authenticated}}</p>
     {{request.user.twitter_following.all}}
+
+    <h1>Notifications</h1>
+
     {% for tweet in tweetdata %}
     <ul>
         <p><a href="/user/{{tweet.twitteruser.id}}/">{{tweet.twitteruser}}</a></p>
         <p>{{tweet.tweet}}</p>
         <p><a href="#">{{tweet.post_date}}</a></p>
         <!-- tweet.id -->
-        <h2>Following</h2>
         <a href="/following/{{tweet.twitteruser.id}}/">Follow</a>
-        <h2>unfollow</h2>
         <a href="/unfollow/{{tweet.twitteruser.id}}/">unfollow</a>
     </ul><br>
     {% endfor %}
