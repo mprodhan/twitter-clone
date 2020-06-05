@@ -4,3 +4,4 @@ db.sqlite3
 __init__.pyc
 tests.pyc
 .vscode
+tests.pyc
