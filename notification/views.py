@@ -1,16 +1,16 @@
+import copy
 from django.shortcuts import HttpResponseRedirect, render, reverse
+from django.contrib.auth.decorators import login_required
 
 from notification.models import Notification
-from tweet.models import Tweet
-from twitteruser.models import TwitterUser
-from tweet.views import tweetadd
 
-def visible_tweet(request, id):
-    notif = Notification.objects.get(id=id)
-    notif.message_visibility = False
-    return HttpResponseRedirect(reverse("homepage"), kwargs={"id": notif.target_user.id})
-
-def invisible_tweet(request, id):
-    notif = Notification.objects.get(id=id)
-    notif.message_visibility = True
-    return HttpResponseRedirect(reverse("homepage"), kwargs={"id": notif.target_user.id})
+@login_required
+def tweet_notification(request):
+    # Assistance from Peter
+    current_user = request.user
+    notif = Notification.objects.filter(target_user=current_user)
+    notif_copy = copy.deepcopy(list(notif))
+    for n in notif:
+        n.message_visibility = False
+        n.save()
+    return render(request, "notification.html", {"notifications": notif_copy})
